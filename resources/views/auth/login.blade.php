@@ -1,4 +1,4 @@
-@extends('layouts.auth')
+@extends('adminlte::layouts.auth')
 
 @section('htmlheader_title')
     Log in
@@ -6,58 +6,39 @@
 
 @section('content')
 <body class="hold-transition login-page">
-    <div class="login-box">
-        <div class="login-logo">
-            <a href="{{ url('/home') }}"><b>Admin</b>LTE</a>
-        </div><!-- /.login-logo -->
+    <div id="app" v-cloak>
+        <div class="login-box">
+            <div class="login-logo">
+                <a href="{{ url('/home') }}"><b>Admin</b>LTE</a>
+            </div><!-- /.login-logo -->
 
-    @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+        @if (count($errors) > 0)
+            <div class="alert alert-danger">
+                <strong>Whoops!</strong> {{ trans('adminlte_lang::message.someproblems') }}<br><br>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-    <div class="login-box-body">
-    <p class="login-box-msg">Sign in to start your session</p>
-    <form action="{{ url('/login') }}" method="post">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <div class="form-group has-feedback">
-            <input type="email" class="form-control" placeholder="Email" name="email"/>
-            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-        </div>
-        <div class="form-group has-feedback">
-            <input type="password" class="form-control" placeholder="Password" name="password"/>
-            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-        </div>
-        <div class="row">
-            <div class="col-xs-8">
-                <div class="checkbox icheck">
-                    <label>
-                        <input type="checkbox" name="remember"> Remember Me
-                    </label>
-                </div>
-            </div><!-- /.col -->
-            <div class="col-xs-4">
-                <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
-            </div><!-- /.col -->
-        </div>
-    </form>
+        <div class="login-box-body">
+        <p class="login-box-msg"> {{ trans('adminlte_lang::message.siginsession') }} </p>
 
-    @include('auth.partials.social_login')
+        <login-form name="{{ config('auth.providers.users.field','email') }}"
+                    domain="{{ config('auth.defaults.domain','') }}"></login-form>
 
-    <a href="{{ url('/password/reset') }}">I forgot my password</a><br>
-    <a href="{{ url('/register') }}" class="text-center">Register a new membership</a>
+        @include('adminlte::auth.partials.social_login')
 
-</div><!-- /.login-box-body -->
+        <a href="{{ url('/password/reset') }}">{{ trans('adminlte_lang::message.forgotpassword') }}</a><br>
+        <a href="{{ url('/register') }}" class="text-center">{{ trans('adminlte_lang::message.registermember') }}</a>
 
-</div><!-- /.login-box -->
+    </div>
 
-    @include('layouts.partials.scripts_auth')
+    </div>
+    </div>
+    @include('adminlte::layouts.partials.scripts_auth')
 
     <script>
         $(function () {
